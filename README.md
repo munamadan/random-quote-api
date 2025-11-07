@@ -28,5 +28,6 @@ A complete FastAPI system for managing and retrieving random quotes with full CR
 ```bash
 git clone https://github.com/munamadan/random-quote-api.git
 cd random-quote-api
+```
 
 Not a big project, just something I was tinkering with for my little brother :)
