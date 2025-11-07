@@ -2,7 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base
 
-# SQLite database URL
 SQLALCHEMY_DATABASE_URL = "sqlite:///./quotes.db"
 
 # Create engine

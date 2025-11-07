@@ -1,16 +1,25 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from database import create_tables, init_sample_data
 from routers import quotes
 import uvicorn
 
-# Create FastAPI app
+# Lifespan context manager
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_tables()
+    init_sample_data()
+    yield
+
+# Create FastAPI app with lifespan
 app = FastAPI(
     title="Random Quote API",
     description="A complete API system for managing and retrieving random quotes",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 # CORS middleware
@@ -25,15 +34,8 @@ app.add_middleware(
 # Include routers
 app.include_router(quotes.router)
 
-@app.on_event("startup")
-async def startup_event():
-    """Initialize database and sample data on startup"""
-    create_tables()
-    init_sample_data()
-
 @app.get("/")
 async def root():
-    """Root endpoint with API information"""
     return {
         "message": "Welcome to Random Quote API",
         "version": "1.0.0",
@@ -48,7 +50,6 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
     return {"status": "healthy", "service": "Random Quote API"}
 
 if __name__ == "__main__":

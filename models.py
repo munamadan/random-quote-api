@@ -38,9 +38,12 @@ class Quote(QuoteBase):
     updated_at: Optional[datetime] = None
     
     class Config:
-        from_attributes = True
+        from_attributes = True  
 
 class QuoteResponse(BaseModel):
     success: bool
     data: Optional[Quote] = None
     message: Optional[str] = None
+    
+    class Config:
+        from_attributes = True  

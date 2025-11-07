@@ -14,9 +14,6 @@ def read_quotes(
     category: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
-    """
-    Get all quotes with optional filtering by category
-    """
     crud = QuoteCRUD(db)
     if category:
         return crud.get_quotes_by_category(category)
@@ -27,9 +24,6 @@ def get_random_quote(
     category: Optional[str] = Query(None, description="Filter by category"),
     db: Session = Depends(get_db)
 ):
-    """
-    Get a random quote, optionally filtered by category
-    """
     crud = QuoteCRUD(db)
     if category:
         quote = crud.get_random_quote_by_category(category)
@@ -54,9 +48,6 @@ def get_random_quote(
 
 @router.get("/{quote_id}", response_model=QuoteResponse)
 def read_quote(quote_id: int, db: Session = Depends(get_db)):
-    """
-    Get a specific quote by ID
-    """
     crud = QuoteCRUD(db)
     quote = crud.get_quote(quote_id)
     if not quote:
@@ -73,9 +64,6 @@ def read_quote(quote_id: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=QuoteResponse)
 def create_quote(quote: QuoteCreate, db: Session = Depends(get_db)):
-    """
-    Create a new quote
-    """
     crud = QuoteCRUD(db)
     db_quote = crud.create_quote(quote)
     return QuoteResponse(
@@ -90,9 +78,6 @@ def update_quote(
     quote_update: QuoteUpdate, 
     db: Session = Depends(get_db)
 ):
-    """
-    Update an existing quote
-    """
     crud = QuoteCRUD(db)
     updated_quote = crud.update_quote(quote_id, quote_update)
     if not updated_quote:
@@ -109,9 +94,6 @@ def update_quote(
 
 @router.delete("/{quote_id}")
 def delete_quote(quote_id: int, db: Session = Depends(get_db)):
-    """
-    Delete a quote
-    """
     crud = QuoteCRUD(db)
     success = crud.delete_quote(quote_id)
     if not success:
@@ -121,9 +103,6 @@ def delete_quote(quote_id: int, db: Session = Depends(get_db)):
 
 @router.get("/categories/list")
 def get_categories(db: Session = Depends(get_db)):
-    """
-    Get all available categories
-    """
     crud = QuoteCRUD(db)
     categories = crud.get_categories()
     return {
